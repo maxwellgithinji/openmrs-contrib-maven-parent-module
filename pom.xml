@@ -4,7 +4,7 @@
 
 	<groupId>com.github.maxwellgithinji</groupId>
 	<artifactId>maven-parent-openmrs-module</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.5</version>
 	<packaging>pom</packaging>
 	<name>OpenMRS Module Parent POM</name>
 	<description>Declares parent POM for any OpenMRS module</description>
