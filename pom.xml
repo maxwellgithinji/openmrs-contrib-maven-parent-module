@@ -4,7 +4,7 @@
 
     <groupId>com.github.maxwellgithinji</groupId>
     <artifactId>maven-parent-openmrs-module</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>pom</packaging>
     <name>OpenMRS Module Parent POM</name>
 	<description>Declares parent POM for any OpenMRS module</description>
@@ -35,10 +35,15 @@
 	</scm>
 
     <distributionManagement>
-        <repository>
+        <snapshotRepository>
             <id>github</id>
             <name>GitHub Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/maxwellgithinji/openmrs-contrib-maven-parent-module</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>Central Repository OSSRH</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
