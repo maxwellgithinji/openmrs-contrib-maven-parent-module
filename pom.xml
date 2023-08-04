@@ -434,6 +434,9 @@
 										<artifactId>
 											maven-dependency-plugin
 										</artifactId>
+										<configuration>
+											<retryFailedDeploymentCount>3</retryFailedDeploymentCount>
+										<configuration>
 										<versionRange>
 											[2.1,)
 										</versionRange>
