@@ -64,5 +64,5 @@ jobs:
         run: mvn deploy
         env:
           GITHUB_USERNAME: x-access-token
-          # GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           BUILD_ENV: 'github-actions'
