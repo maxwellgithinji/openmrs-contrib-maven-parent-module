@@ -33,7 +33,7 @@ if ! [[ -d ${repo_dir} ]]
 then
   mkdir ${repo_dir}
   echo "Copying git folder from original project..."
-  cp -a ${base_dir}/.git ${repo_dir}/.git
+  cp -a ${base_dir}/* ${repo_dir}/*
 fi
 
 # Check out to new branch called repository
@@ -42,11 +42,10 @@ pom_location=${target_dir}/pom.xml
 cd ${repo_dir}
 git checkout -B main
 mvn install:install-file -DgroupId=${group_id} -DartifactId=${artifact_id} -Dversion=${version} -Dfile=${pom_location} -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
-cd ${base_dir}
 
 # Commit and push
 echo "Committing and pushing to repository branch..."
-git add .
+git add -A .
 git commit -m "Release version ${version}"
 git push origin main --force
 

@@ -58,7 +58,7 @@ jobs:
             ]'
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn install:install-file -DgroupId=com.github.maxwellgithinji -DartifactId=maven-parent-openmrs-module -Dversion=${{ github.event.release.tag_name }} -Dfile=/pom.xml -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
 
       - name: Publish to GitHub Packages Apache Maven
         run: mvn deploy
