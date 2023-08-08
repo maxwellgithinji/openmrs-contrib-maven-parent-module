@@ -43,27 +43,46 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-          settings-path: ${{ github.workspace }} # location for the settings.xml file
+          settings-path: ${{ github.workspace }} #
 
-      - name: Setup Maven settings.xml
-        uses: whelk-io/maven-settings-xml-action@v11
-        with:
-          servers:
-            '[
-              {
-                "id": "github",
-                "username": "${env.GITHUB_USERNAME}",
-                "password": "${env.GITHUB_TOKEN}"
-              }
-            ]'
+      - name: Verify and Deploy
+        run: |
+          # Verify arguments
+          if [ -z "${{ env.GROUP_ID }}" ] || [ -z "${{ env.ARTIFACT_ID }}" ] || [ -z "${{ github.event.release.tag_name }}" ]; then
+            echo "Usage: deployscript <group_id> <artifact_id> <version>"
+            exit 1
+          fi
 
-      - name: Build with Maven
-        run: mvn install:install-file -DgroupId=com.github.maxwellgithinji -DartifactId=maven-parent-openmrs-module -Dversion=${{ github.event.release.tag_name }} -Dfile=/pom.xml -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
+          echo "Starting deploy script!"
 
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy
+          # First clean install in base folder to ensure the artifact is present
+          mvn clean install
+
+          # Create new repository directory
+          base_dir=$(pwd)
+          target_dir=${base_dir}
+          parent_dir=$(dirname "$base_dir")
+
+          base_dir_name=${base_dir##*/}
+          
+          # Check out to new branch called repository
+          echo "Setting up repository branch and installing pom..."
+          pom_location=${target_dir}/pom.xml
+          git checkout -B main
+          mvn install:install-file -DgroupId=${{ env.GROUP_ID }} -DartifactId=${{ env.ARTIFACT_ID }} -Dversion=${{ github.event.release.tag_name }} -Dfile=${pom_location} -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
+
+          # Commit and push
+          echo "Committing and pushing to repository branch..."
+          git add -A .
+          git commit -m "Release version ${{ github.event.release.tag_name }}"
+          git push origin main --force
+
+          echo "Done!"
+
         env:
           GITHUB_USERNAME: x-access-token
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           BUILD_ENV: 'github-actions'
           MVN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GROUP_ID: ${{ secrets.GROUP_ID }}
+          ARTIFACT_ID: ${{ secrets.ARTIFACT_ID }}
