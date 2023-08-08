@@ -26,16 +26,6 @@ parent_dir=$(dirname "$base_dir")
 base_dir_name=${base_dir%%+(/)}
 base_dir_name=${base_dir_name##*/}
 
-# repo_dir=${parent_dir}/${base_dir_name}-repository
-
-# Copy git folder if the directory didn't exist yet
-if ! [[ -d ${repo_dir} ]]
-then
-  # mkdir ${repo_dir}
-  echo "Copying git folder from original project..."
-  # cp -a ${base_dir}/* ${repo_dir}/*
-fi
-
 # Check out to new branch called repository
 echo "Setting up repository branch and installing pom..."
 pom_location=${target_dir}/pom.xml
