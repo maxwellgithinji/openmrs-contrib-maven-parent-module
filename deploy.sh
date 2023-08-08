@@ -40,13 +40,14 @@ fi
 echo "Setting up repository branch and installing pom..."
 pom_location=${target_dir}/pom.xml
 cd ${repo_dir}
-git checkout -B release
+git checkout -B main
 mvn install:install-file -DgroupId=${group_id} -DartifactId=${artifact_id} -Dversion=${version} -Dfile=${pom_location} -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
+cd ${base_dir}
 
 # Commit and push
 echo "Committing and pushing to repository branch..."
-git add -A .
+git add .
 git commit -m "Release version ${version}"
-git push origin release --force
+git push origin main --force
 
 echo "Done!"
