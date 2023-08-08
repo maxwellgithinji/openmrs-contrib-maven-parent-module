@@ -71,7 +71,7 @@ jobs:
           
           # Check out to new branch called repository
           echo "Setting up repository branch and installing pom..."
-          pom_location=${target_dir}/pom.xml
+          pom_location=${target_dir}/assets/pom.xml
           git checkout -B main
           mvn install:install-file -DgroupId=${{ env.GROUP_ID }} -DartifactId=${{ env.ARTIFACT_ID }} -Dversion=${{ github.event.release.tag_name }} -Dfile=${pom_location} -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
 
