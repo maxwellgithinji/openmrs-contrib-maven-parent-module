@@ -64,6 +64,10 @@ jobs:
           parent_dir=$(dirname "$base_dir")
 
           base_dir_name=${base_dir##*/}
+
+          # setup git
+          git config --global user.email "maxwellgithinji@gmail.com"
+          git config --global user.name "maxwellgithinji"
           
           # Check out to new branch called repository
           echo "Setting up repository branch and installing pom..."
