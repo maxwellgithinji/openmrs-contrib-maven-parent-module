@@ -26,7 +26,7 @@ jobs:
           server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
 
       - name: Build with Maven
-        run: mvn clean install
+        run: cd assets && mvn clean install
 
   build-and-release:
     if: ${{ github.event_name == 'release' }}
@@ -56,7 +56,8 @@ jobs:
           echo "Starting deploy script!"
 
           # First clean install in base folder to ensure the artifact is present
-          mvn clean install
+          cd assets && mvn clean install
+          cd ..
 
           # Create new repository directory
           base_dir=$(pwd)
@@ -71,7 +72,7 @@ jobs:
           
           # Check out to new branch called repository
           echo "Setting up repository branch and installing pom..."
-          pom_location=${target_dir}/pom.xml
+          pom_location=${target_dir}/assets/pom.xml
           git checkout -B main
           mvn install:install-file -DgroupId=${{ env.GROUP_ID }} -DartifactId=${{ env.ARTIFACT_ID }} -Dversion=${{ github.event.release.tag_name }} -Dfile=${pom_location} -Dpackaging=pom -DgeneratePom=true -DlocalRepositoryPath=. -DcreateChecksum=true
 
