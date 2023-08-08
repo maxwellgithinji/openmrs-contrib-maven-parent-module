@@ -9,6 +9,23 @@ on:
     types: [ created ]
 
 jobs:
+  sync-to-gitlab:
+    if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    name: Git Repo Sync
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: wangchucheng/git-repo-sync@v0.1.0
+      with:
+        # Such as https://github.com/wangchucheng/git-repo-sync.git
+        target-url: ${{ secrets.GLAB_URL }}
+        # Such as wangchucheng
+        target-username: ${{ secrets.GLAB_USERNAME }}
+          # You can store token in your project's 'Setting > Secrets' and reference the name here
+        target-token: ${{ secrets.GLAB_ACCESS_TOKEN }}
+
   build-only:
     if: ${{ github.event_name == 'pull_request' || github.event_name == 'push' }}
     runs-on: ubuntu-latest
@@ -27,6 +44,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install
+      
 
   build-and-release:
     if: ${{ github.event_name == 'release' }}
